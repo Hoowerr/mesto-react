@@ -10,4 +10,4 @@
 Создание, настройка и дебаггинг проекта на «Реакте»
 Хуки
 
-**Ссылка GitHub Pages:** https://hoowerr.github.io/mesto/
+**Ссылка GitHub Pages:** https://hoowerr.github.io/mesto-react/
