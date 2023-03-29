@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from "react";
-import api from "../utils/Api";
+import React, { useContext } from "react";
 import Card from "./Card";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([info, cards]) => {
-        setUserName(info.name);
-        setUserDescription(info.about);
-        setUserAvatar(info.avatar);
-        setCards(cards);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+function Main({
+  cards,
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+}) {
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <div>
@@ -32,12 +24,16 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
               id="profile__avatar-btn"
               onClick={onEditAvatar}
             >
-              <img src={userAvatar} alt="аватар" className="profile__avatar" />
+              <img
+                src={currentUser.avatar}
+                alt="аватар"
+                className="profile__avatar"
+              />
             </button>
             <div className="profile__info">
               <div className="profile__main">
-                <h1 className="profile__title">{userName}</h1>
-                <p className="profile__subtitle">{userDescription}</p>
+                <h1 className="profile__title">{currentUser.name}</h1>
+                <p className="profile__subtitle">{currentUser.about}</p>
               </div>
               <button
                 type="button"
@@ -54,7 +50,13 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
         </section>
         <section className="elements">
           {cards.map((card) => (
-            <Card card={card} key={card._id} onCardClick={onCardClick} />
+            <Card
+              card={card}
+              key={card._id}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
+            />
           ))}
         </section>
       </main>
